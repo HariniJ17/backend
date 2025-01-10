@@ -4,6 +4,7 @@ import sqlite3
 from flask_cors import CORS
 
 app = Flask(__name__)
+print(app.url_map)
 
 # Allow CORS for the frontend's specific URL (Make sure to adjust this URL if needed)
 CORS(app, resources={r"/signup": {"origins": "https://harinij17.github.io"}})

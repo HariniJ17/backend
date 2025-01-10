@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
-import sqlite3
+from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_cors import CORS  # Import CORS
+import sqlite3
+from flask_cors import CORS
 
-app = Flask(__name__)  # Create the Flask app instance
-CORS(app, resources={r"/*": {"origins": "https://harinij17.github.io/frontend/"}})  # Enable CORS for your frontend
+app = Flask(__name__)
+
+# Allow CORS for the frontend's specific URL (Make sure to adjust this URL if needed)
+CORS(app, resources={r"/signup": {"origins": "https://harinij17.github.io"}})
 
 # Database initialization
 def init_db():
@@ -35,7 +37,7 @@ def signup():
     conn.commit()
     conn.close()
 
-    return {"message": "Signup successful"}, 201
+    return jsonify({"message": "Signup successful"}), 201
 
 # Login route
 @app.route('/login', methods=['POST'])
@@ -52,10 +54,10 @@ def login():
 
     if user and check_password_hash(user[3], password):  # user[3] is the hashed password column
         # If the user exists and the password matches
-        return {"message": f"Welcome, {username}"}, 200
+        return jsonify({"message": f"Welcome, {username}"}), 200
     else:
         # If username or password is incorrect
-        return {"message": "Invalid credentials"}, 401
+        return jsonify({"message": "Invalid credentials"}), 401
 
 if __name__ == '__main__':
     init_db()  # Initialize the database
